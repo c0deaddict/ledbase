@@ -45,7 +45,7 @@ bool isValidMode(int idx) {
     if (idx < 0 || idx >= MAX_MODES) {
         return false;
     }
-    return animationsList[idx] != NULL;
+    return modesList[idx] != NULL;
 }
 
 void setMode(int idx) {

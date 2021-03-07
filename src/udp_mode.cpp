@@ -58,8 +58,8 @@ void UdpMode::onData(byte *data, size_t len) {
         return;
     }
 
-    for (int i = offset, j = 5; i < offset + count; i++) {
-        CRGB color = CRGB(data[j++], data[j++], data[j++]);
+    for (int i = offset, j = 5; i < offset + count; i++, j += 3) {
+        CRGB color = CRGB(data[j], data[j + 1], data[j + 2]);
 
         if (flags & FLAG_RAW) {
             if (i < LED_COUNT) {
