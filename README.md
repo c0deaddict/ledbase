@@ -6,9 +6,9 @@ Base for my Platformio LED matrix projects running on a ESP32.
 
 Include the library in `platformio.ini`:
 
-```toml
+```ini
 [env]
-lib_deps = https://github.com/c0deaddict/ledbase.git#master
+lib_deps = https://github.com/c0deaddict/ledbase.git#main
 ```
 
 ## Config
@@ -17,7 +17,7 @@ Ledbase requires configuration preprocessor variables to be declared at build
 time. This can be accomplished by adding your config to the `build_flags` in
 `platformio.ini`.
 
-```toml
+```ini
 build_flags = -include "src/config.h"
 ```
 
