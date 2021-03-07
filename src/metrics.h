@@ -87,7 +87,7 @@ public:
 
     void dec() {
         value--;
-    }    
+    }
 
     void inc(long long i) {
         value += i;

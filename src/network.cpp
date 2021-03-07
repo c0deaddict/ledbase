@@ -10,9 +10,21 @@ const long utcOffsetSeconds = 3600;
 WiFiUDP ntpUDP;
 NTPClient ntp(NTPClient(ntpUDP, "europe.pool.ntp.org", utcOffsetSeconds));
 
+Counter wifiDisconnected("esp_wifi_disconnected", "Number of times WiFi is diconnected.");
+Counter mqttDisconnected("esp_mqtt_disconnected", "Number of times MQTT is disconnected.");
+
+MetricProxy wifiRssi(
+    "esp_wifi_rssi",
+    "gauge",
+    "Signal strength of WiFi.",
+    [](const char *name, Print *out) {
+        out->printf("%s %d\n", name, WiFi.RSSI());
+    }
+);
+
 // consider switching to
 // esp-mqtt
-#include "mqtt_client.h"
+// #include "mqtt_client.h"
 // https://github.com/espressif/esp-idf/blob/73db142403c6e5b763a0e1c07312200e9b622673/examples/protocols/mqtt/tcp/main/app_main.c
 // https://github.com/espressif/esp-mqtt
 
@@ -60,6 +72,7 @@ void onWifiEvent(WiFiEvent_t event) {
         break;
 
     case SYSTEM_EVENT_STA_DISCONNECTED:
+        wifiDisconnected.inc();
         Serial.println("WiFi lost connection");
         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
         xTimerStart(wifiReconnectTimer, 0);
@@ -71,11 +84,12 @@ void onWifiEvent(WiFiEvent_t event) {
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-  Serial.println("Disconnected from MQTT.");
+    mqttDisconnected.inc();
+    Serial.println("Disconnected from MQTT.");
 
-  if (WiFi.isConnected()) {
-    xTimerStart(mqttReconnectTimer, 0);
-  }
+    if (WiFi.isConnected()) {
+        xTimerStart(mqttReconnectTimer, 0);
+    }
 }
 
 void setupNetwork() {
