@@ -33,3 +33,5 @@ extern Animation *animationsList[];
 int registerAnimation(Animation *animation);
 bool isValidAnimation(int idx);
 void setAnimation(int idx);
+void startAnimation();
+void stopAnimation();

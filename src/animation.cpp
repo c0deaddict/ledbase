@@ -11,6 +11,8 @@ Animation* animationsList[MAX_ANIMATIONS] = {
 
 Animation *animation = animationsList[0];
 
+bool started = false;
+
 Setting animationSetting(
     "animation",
     [](JsonVariant& value) {
@@ -45,9 +47,22 @@ bool isValidAnimation(int idx) {
 void setAnimation(int idx) {
     if (!isValidAnimation(idx)) return;
 
-    // TODO: are we running an animation?
     // TODO: consider transitions, like fade?
-    animation->stop();
+    if (started) animation->stop();
     animation = animationsList[idx];
-    animation->start();
+    if (started) animation->start();
+}
+
+void startAnimation() {
+    if (!started) {
+        animation->start();
+        started = true;
+    }
+}
+
+void stopAnimation() {
+    if (started) {
+        animation->stop();
+        started = false;
+    }
 }

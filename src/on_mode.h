@@ -10,6 +10,11 @@ public:
 
     void enter() {
         ledsOff();
+        startAnimation();
+    }
+
+    void leave() {
+        stopAnimation();
     }
 
     void update() {

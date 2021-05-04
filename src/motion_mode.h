@@ -14,6 +14,7 @@ public:
     MotionMode();
 
     void enter();
+    void leave();
     void update();
     void onMotionChange(bool motion);
 };

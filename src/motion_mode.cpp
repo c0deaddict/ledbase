@@ -24,11 +24,15 @@ void MotionMode::enter() {
     ledsOff();
 }
 
+void MotionMode::leave() {
+    stopAnimation();
+}
+
 void MotionMode::update() {
     if (motion) {
         if (millis() - motionStart > motionDuration*1000L) {
             motion = false;
-            animation->stop();
+            stopAnimation();
             ledsOff();
         } else {
             animation->update();
@@ -39,10 +43,10 @@ void MotionMode::update() {
 void MotionMode::onMotionChange(bool motion) {
     Serial.printf("motion=%d\n\r", motion);
     if (motion) {
-        if (this->motion != motion) {
-            this->motion = motion;
-            animation->start();
+        if (!this->motion) {
+            startAnimation();
         }
+        this->motion = true;
         motionStart = millis();
     }
 }

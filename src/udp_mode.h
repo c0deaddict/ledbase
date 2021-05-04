@@ -9,6 +9,13 @@ private:
     unsigned int timeout;
     Setting *timeoutSetting;
 
+    unsigned int beatDuration;
+    unsigned long beatStart;
+    CRGB beatColor;
+
+    void frame(byte flags, byte *data, size_t len);
+    void beat(byte flags, byte *data, size_t len);
+
 public:
     UdpMode();
 

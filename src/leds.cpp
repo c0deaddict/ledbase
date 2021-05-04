@@ -76,6 +76,7 @@ void setupLeds() {
 
     xTaskCreatePinnedToCore(showLedsTask, "showLedsTask", 2048, NULL, 2, &showLedsTaskHandle, LED_SHOW_CORE);
 
+    FastLED.setDither(0);
     FastLED.setBrightness(LED_DEFAULT_BRIGHTNESS);
     ledsOff();
 }
