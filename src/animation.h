@@ -17,6 +17,7 @@ public:
     virtual void start() {};
     virtual void stop() {};
     virtual void tick() = 0;
+    virtual void beat() {};
 
     void update() {
         if (millis() - last_frame > 1000.0 / fps) {

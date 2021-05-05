@@ -17,8 +17,14 @@ public:
     // Called each loop.
     virtual void update() {};
 
-    // Called when data is received.
-    virtual void onData(byte *data, size_t len) {};
+    // Called when an UDP frame is received.
+    virtual void onFrame(byte *data, size_t len) {};
+
+    // Called when an UDP beat is received.
+    // Return false means pass the beat onto the animation.
+    virtual bool onBeat(byte *data, size_t len) {
+        return false;
+    };
 
     virtual void onMotionChange(bool motion) {};
 

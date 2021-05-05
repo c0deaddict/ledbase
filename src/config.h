@@ -36,6 +36,27 @@
 #error "LED_COUNT is not configured"
 #endif
 
+#ifndef LED_DIM
+#error "LED_DIM is not configured"
+#endif
+
+#if LED_DIM == 2 || LED_DIM == 3
+
+#ifndef LED_XLEN
+#error "LED_XLEN is not configured"
+#endif
+#ifndef LED_YLEN
+#error "LED_YLEN is not configured"
+#endif
+
+#endif
+
+#if LED_DIM == 3
+#ifndef LED_ZLEN
+#error "LED_ZLEN is not configured"
+#endif
+#endif
+
 // Optional
 
 #ifndef MQTT_PORT

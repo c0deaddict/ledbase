@@ -21,7 +21,8 @@ public:
 
     void enter();
     void update();
-    void onData(byte *data, size_t len);
+    void onFrame(byte *data, size_t len);
+    bool onBeat(byte *data, size_t len);
 };
 
 extern void setLogicalPixel(int i, CRGB color);

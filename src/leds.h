@@ -14,3 +14,11 @@ void clearLeds();
 void ledsOff();
 
 extern void configureLeds();
+
+#if LED_DIM == 1
+extern void setPixel(int i, CRGB color);
+#elif LED_DIM == 2
+extern void setPixel(int x, int y, CRGB color);
+#elif LED_DIM == 3
+extern void setPixel(int x, int y, int z, CRGB color);
+#endif
