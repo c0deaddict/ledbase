@@ -1,4 +1,5 @@
 #include "ledbase.h"
+#include <AsyncJson.h>
 
 void handlePostMotion(AsyncWebServerRequest *request) {
     mode->onMotionChange(true);
@@ -23,7 +24,7 @@ void handleGetNames(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
-void setupHttp() {
+void setupHttpRoutes() {
     http.on("/motion", HTTP_POST, handlePostMotion);
     http.on("/names", HTTP_GET, handleGetNames); 
 }

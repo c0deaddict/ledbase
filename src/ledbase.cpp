@@ -3,7 +3,7 @@
 
 void setupLeds();
 void setupUdp();
-void setupHttp();
+void setupHttpRoutes();
 void handleUdp();
 
 void setupLedbase() {
@@ -13,7 +13,7 @@ void setupLedbase() {
     mode->enter();
 
     // Setup http routes before calling setupEspbase.
-    setupHttp();
+    setupHttpRoutes();
     setupEspbase();
     setupUdp();
 }

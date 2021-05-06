@@ -2,14 +2,15 @@
 #include "config.h"
 #include "animation.h"
 
-#include "animations/rainbow.h"
+Animation* animationsList[MAX_ANIMATIONS] = { NULL, };
 
-Animation* animationsList[MAX_ANIMATIONS] = {
-    new Rainbow(60),
-    NULL,
+class NullAnimation : public Animation {
+public:
+    NullAnimation() : Animation("null", 0) {};
+    void tick() {};
 };
 
-Animation *animation = animationsList[0];
+Animation *animation = new NullAnimation();
 
 bool started = false;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <espbase.h>
+#include "mode.h"
 #include "leds.h"
 
 class UdpMode : public Mode {
