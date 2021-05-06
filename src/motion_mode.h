@@ -1,7 +1,7 @@
 #pragma once
 
+#include <espbase.h>
 #include "mode.h"
-#include "settings.h"
 
 class MotionMode : public Mode {
 private:

@@ -1,6 +1,6 @@
+#include <espbase.h>
 #include "config.h"
 #include "mode.h"
-#include "settings.h"
 
 #include "off_mode.h"
 #include "on_mode.h"

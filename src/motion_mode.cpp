@@ -1,7 +1,7 @@
+#include <espbase.h>
 #include "config.h"
 #include "motion_mode.h"
 #include "animation.h"
-#include "settings.h"
 
 MotionMode::MotionMode() : Mode("motion"), motionDuration(DEFAULT_MOTION_DURATION) {
     motionDurationSetting = new Setting(

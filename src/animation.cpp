@@ -1,6 +1,6 @@
+#include <espbase.h>
 #include "config.h"
 #include "animation.h"
-#include "settings.h"
 
 #include "animations/rainbow.h"
 

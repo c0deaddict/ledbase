@@ -1,9 +1,6 @@
-#include <Arduino.h>
-#include <WiFiUdp.h>
-
+#include <espbase.h>
 #include "config.h"
 #include "mode.h"
-#include "network.h"
 #include "animation.h"
 
 WiFiUDP udpSocket;

@@ -1,3 +1,4 @@
+#include <espbase.h>
 #include "config.h"
 #include "udp_mode.h"
 #include "leds.h"

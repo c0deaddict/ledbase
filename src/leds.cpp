@@ -1,6 +1,6 @@
+#include <espbase.h>
 #include "config.h"
 #include "leds.h"
-#include "settings.h"
 
 CRGB leds[LED_COUNT];
 
