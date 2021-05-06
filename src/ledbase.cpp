@@ -8,7 +8,7 @@ void handleUdp();
 
 void setupLedbase() {
     // LEDs need to be setup before network.
-    delay(3000);
+    // delay(3000);
     setupLeds();
     mode->enter();
 
