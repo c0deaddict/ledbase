@@ -45,9 +45,7 @@ void Rain::newDrop() {
 }
 
 void Rain::tick() {
-    Serial.print(".");
-
-    if (random(0, 7) == 0) {
+    if (random(0, 3) == 0) {
         newDrop();
     }
 

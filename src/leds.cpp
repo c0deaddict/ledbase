@@ -4,6 +4,8 @@
 
 CRGB leds[LED_COUNT];
 
+#ifdef ESP32
+
 // Task handles for use in the notifications
 static TaskHandle_t showLedsTaskHandle = 0;
 static TaskHandle_t userTaskHandle = 0;
@@ -58,6 +60,19 @@ void showLedsTask(void *pvParameters) {
     }
 }
 
+#else // ESP8266
+
+bool showLeds() {
+    FastLED.show();
+    return true;
+}
+
+bool ensureShowLeds() {
+    return showLeds();
+}
+
+#endif
+
 void fillColor(CRGB color) {
     fill_solid(leds, LED_COUNT, color);
 }
@@ -74,7 +89,9 @@ void ledsOff() {
 void setupLeds() {
     configureLeds();
 
+    #ifdef ESP32
     xTaskCreatePinnedToCore(showLedsTask, "showLedsTask", 2048, NULL, 2, &showLedsTaskHandle, LED_SHOW_CORE);
+    #endif
 
     FastLED.setDither(0);
     FastLED.setBrightness(LED_DEFAULT_BRIGHTNESS);
