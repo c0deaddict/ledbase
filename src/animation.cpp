@@ -4,6 +4,10 @@
 
 Animation* animationsList[MAX_ANIMATIONS] = { NULL, };
 
+// TODO: define a single RGB color value, define a palette 0 = single color
+// TODO: define intensity parameter that determines the speed of animations.
+// TODO: run most animations at a fixed FPS (configurable).
+
 class NullAnimation : public Animation {
 public:
     NullAnimation() : Animation("null", 0) {};
