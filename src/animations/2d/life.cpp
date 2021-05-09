@@ -26,6 +26,10 @@ const int neighbourOffsets[8] = {
     CELL_IDX(+1, +1), // y+1, x+1
 };
 
+Life::Life() : Animation("life") {
+    setIntensityScalar(1.0 / 5.0);
+}
+
 void Life::start() {
     cells1 = (CRGB *)malloc(sizeof(CRGB) * CELL_COUNT);
     cells2 = (CRGB *)malloc(sizeof(CRGB) * CELL_COUNT);
@@ -144,5 +148,8 @@ void Life::tick() {
     if (!anyLife || gen > 200) {
         seed();
     }
+}
+
+void Life::draw() {
 }
 #endif

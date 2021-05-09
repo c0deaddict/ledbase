@@ -62,3 +62,11 @@
 #ifndef MAX_PALETTES
 #define MAX_PALETTES 20
 #endif
+
+#ifndef FPS
+#define FPS 60
+#endif
+
+#ifndef DEFAULT_INTENSITY
+#define DEFAULT_INTENSITY 10
+#endif

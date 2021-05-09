@@ -1,10 +1,16 @@
 #include <palette.h>
 #include "rainbow.h"
 
+Rainbow::Rainbow() : Animation("rainbow") {
+    setIntensityScalar(5.0);
+};
+
 void Rainbow::tick() {
-   uint8_t palIndex = beat8(60, 255);
+    palIndex++;
+}
+
+void Rainbow::draw() {
    for (int i = 0; i < LED_COUNT; i++) {
-       leds[i] = palette->color(palIndex);
-       palIndex += 5;
+       leds[i] = palette->color(palIndex + i*5);
    }
 }

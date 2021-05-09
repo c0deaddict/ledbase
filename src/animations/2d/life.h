@@ -16,8 +16,9 @@ private:
     bool computeNextGen();
 
 public:
-    Life() : Animation("life", 3) {};
+    Life();
     void start();
     void stop();
     void tick();
+    void draw();
 };

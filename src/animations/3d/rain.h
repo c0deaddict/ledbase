@@ -16,7 +16,7 @@ private:
     byte hue = 0;
 
 public:
-    Rain() : Animation("rain", 25) {};
+    Rain() : Animation("rain") {};
     void start();
     void tick();
     void beat();

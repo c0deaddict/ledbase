@@ -9,8 +9,8 @@ float wave(float w, float k, float t, float x, float y) {
     return cos(k * r + w * t);
 }
 
-void Wave::tick() {
-    float t = millis() / 250.0;
+void Wave::draw() {
+    float t = (millis() / 10000.0) * (float)intensity;
     float w = 0.5;
     float k = -w;
     for (int x = 0; x < LED_XLEN; x++) {

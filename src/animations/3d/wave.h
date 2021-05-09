@@ -5,6 +5,6 @@
 
 class Wave : public Animation {
 public:
-    Wave() : Animation("wave", 60) {};
-    void tick();
+    Wave() : Animation("wave") {};
+    void draw();
 };

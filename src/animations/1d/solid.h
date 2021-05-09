@@ -9,6 +9,6 @@ private:
     Setting *palIndexSetting;
 
 public:
-    Solid(int fps);
-    void tick();
+    Solid();
+    void draw();
 };

@@ -64,5 +64,6 @@ void Rain::tick() {
 
 void Rain::beat() {
     hue += 66;
+    newDrop();
 }
 #endif

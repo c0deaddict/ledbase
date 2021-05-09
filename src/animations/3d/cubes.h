@@ -10,7 +10,7 @@ private:
     void drawCube(int offset, int y, CRGB color);
 
 public:
-    Cubes() : Animation("cubes", 20) {};
+    Cubes();
     void start();
     void tick();
 };

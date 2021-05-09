@@ -6,10 +6,10 @@ float wave(float w, float k, float t, float x, float z) {
     return cos(k * r + w * t);
 }
 
-void Wave::tick() {
+void Wave::draw() {
     fillColor(CRGB::Black);
 
-    float t = millis() / 250.0;
+    float t = (millis() / 10000.0) * (float)intensity;
     float w = 1.5;
     float k = -w;
     float maxx = LED_XLEN - 1;

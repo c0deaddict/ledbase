@@ -4,6 +4,9 @@
 #define BOX_LEN 3
 #define MOVE (LED_XLEN - BOX_LEN)
 
+Cubes::Cubes() : Animation("cubes") {
+}
+
 void Cubes::start() {
     t = 0;
 }

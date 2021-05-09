@@ -5,7 +5,9 @@ void BeatChase::tick() {
     for (int i = LED_COUNT - 1; i > 0; i--) {
         leds[i] = leds[i - 1];
     }
+}
 
+void BeatChase::draw() {
     if (energy > 0) {
         float ratio = energy / (float)peakEnergy;
         byte brightness = constrain(round(pow(ratio, 1.5) * 255), 0, 255);

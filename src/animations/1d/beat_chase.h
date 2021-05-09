@@ -9,9 +9,10 @@ private:
     int energy;
 
 public:
-    BeatChase(int energy, int fps)
-        : Animation("beat_chase", fps)
+    BeatChase(int energy)
+        : Animation("beat_chase")
         , peakEnergy(energy) {};
     void tick();
+    void draw();
     void beat();
 };

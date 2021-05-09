@@ -1,8 +1,8 @@
 #include <palette.h>
 #include "solid.h"
 
-Solid::Solid(int fps)
-    : Animation("solid", fps)
+Solid::Solid()
+    : Animation("solid", FPS)
     , palIndex(0) {
     palIndexSetting = new Setting(
         "solidPalIndex",
@@ -18,6 +18,6 @@ Solid::Solid(int fps)
     );
 }
 
-void Solid::tick() {
+void Solid::draw() {
     fillColor(palette->color(palIndex));
 }

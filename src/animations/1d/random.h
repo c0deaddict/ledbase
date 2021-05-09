@@ -1,9 +1,10 @@
 #pragma once
 
+#include <config.h>
 #include <animation.h>
 
 class Random : public Animation {
 public:
-    Random() : Animation("random", 60) {};
+    Random() : Animation("random") {};
     void tick();
 };

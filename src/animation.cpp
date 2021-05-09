@@ -5,16 +5,15 @@
 Animation* animationsList[MAX_ANIMATIONS] = { NULL, };
 
 // TODO: define a single RGB color value, define a palette 0 = single color
-// TODO: define intensity parameter that determines the speed of animations.
-// TODO: run most animations at a fixed FPS (configurable).
 
 class NullAnimation : public Animation {
 public:
     NullAnimation() : Animation("null", 0) {};
-    void tick() {};
+    void draw() {};
 };
 
 Animation *animation = new NullAnimation();
+uint8_t intensity = DEFAULT_INTENSITY;
 
 bool started = false;
 
@@ -24,9 +23,30 @@ Setting animationSetting(
         value.set(0);
     },
     [](JsonVariant value) {
-        int animationIdx = value.as<int>();
-        if (!isValidAnimation(animationIdx)) return false;
-        setAnimation(animationIdx);
+        int idx;
+        if (value.is<String>()) {
+            idx = lookupAnimation(value.as<String>().c_str());
+            if (idx < 0) return false;
+        } else {
+            idx = value.as<int>();
+            if (!isValidAnimation(idx)) return false;
+        }
+        setAnimation(idx);
+        return true;
+    }
+);
+
+Setting intensitySetting(
+    "intensity",
+    [](JsonVariant& value) {
+        value.set(DEFAULT_INTENSITY);
+    },
+    [](JsonVariant value) {
+        int newIntensity = value.as<int>();
+        if (newIntensity < 0 || newIntensity > 255) {
+            return false;
+        }
+        intensity = newIntensity;
         return true;
     }
 );
@@ -47,6 +67,18 @@ bool isValidAnimation(int idx) {
         return false;
     }
     return animationsList[idx] != NULL;
+}
+
+int lookupAnimation(const char *name) {
+    for (int idx = 0; idx < MAX_ANIMATIONS; idx++) {
+        Animation *animation = animationsList[idx];
+        if (animation != NULL) {
+            if (!strcmp(name, animation->name)) {
+                return idx;
+            }
+        }
+    }
+    return -1;
 }
 
 void setAnimation(int idx) {
