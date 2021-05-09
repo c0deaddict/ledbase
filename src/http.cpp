@@ -20,6 +20,11 @@ void handleGetNames(AsyncWebServerRequest *request) {
         animationsJson.add(animationsList[i]->name);
     }
 
+    JsonArray palettesJson = root.createNestedArray("palettes");
+    for (int i = 0; i < MAX_PALETTES && palettesList[i] != NULL; i++) {
+        palettesJson.add(palettesList[i]->name);
+    }
+
     response->setLength();
     request->send(response);
 }

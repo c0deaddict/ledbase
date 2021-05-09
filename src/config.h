@@ -58,3 +58,7 @@
 #ifndef MAX_ANIMATIONS
 #define MAX_ANIMATIONS 10
 #endif
+
+#ifndef MAX_PALETTES
+#define MAX_PALETTES 20
+#endif
