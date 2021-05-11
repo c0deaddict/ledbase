@@ -70,3 +70,7 @@
 #ifndef DEFAULT_INTENSITY
 #define DEFAULT_INTENSITY 10
 #endif
+
+#ifndef DEFAULT_COLOR
+#define DEFAULT_COLOR CRGB::Blue
+#endif

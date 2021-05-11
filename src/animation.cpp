@@ -14,6 +14,7 @@ public:
 
 Animation *animation = new NullAnimation();
 uint8_t intensity = DEFAULT_INTENSITY;
+CRGB color = DEFAULT_COLOR;
 
 bool started = false;
 
@@ -47,6 +48,24 @@ Setting intensitySetting(
             return false;
         }
         intensity = newIntensity;
+        return true;
+    }
+);
+
+Setting colorSetting(
+    "color",
+    [](JsonVariant& value) {
+        char buf[7];
+        sprintf(buf, "%02x%02x%02x", color.r, color.g, color.b);
+        value.set(String(buf));
+    },
+    [](JsonVariant value) {
+        unsigned int r, g, b;
+        const char *str = value.as<const char *>();
+        if (str == NULL || sscanf(str, "%02x%02x%02x", &r, &g, &b) != 3) {
+            return false;
+        }
+        color = CRGB(r, g, b);
         return true;
     }
 );

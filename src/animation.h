@@ -4,6 +4,7 @@
 #include "leds.h"
 
 extern uint8_t intensity;
+extern CRGB color;
 
 class Animation {
 private:
