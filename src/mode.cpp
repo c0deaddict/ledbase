@@ -48,6 +48,18 @@ bool isValidMode(int idx) {
     return modesList[idx] != NULL;
 }
 
+int lookupMode(const char *name, size_t len) {
+    for (int idx = 0; idx < MAX_MODES; idx++) {
+        Mode *mode = modesList[idx];
+        if (mode != NULL) {
+            if (!strncmp(name, mode->name, len)) {
+                return idx;
+            }
+        }
+    }
+    return -1;
+}
+
 void setMode(int idx) {
     if (!isValidMode(idx)) return;
 

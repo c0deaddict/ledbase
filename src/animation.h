@@ -56,7 +56,7 @@ extern Animation *animationsList[];
 
 int registerAnimation(Animation *animation);
 bool isValidAnimation(int idx);
-int lookupAnimation(const char *name);
+int lookupAnimation(const char *name, size_t len);
 void setAnimation(int idx);
 void startAnimation();
 void stopAnimation();

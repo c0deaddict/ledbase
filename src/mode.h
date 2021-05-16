@@ -36,4 +36,5 @@ extern Mode *modesList[];
 
 int registerMode(Mode *mode);
 bool isValidMode(int idx);
+int lookupMode(const char *name, size_t len);
 void setMode(int idx);

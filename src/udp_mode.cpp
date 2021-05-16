@@ -63,7 +63,7 @@ void UdpMode::onFrame(byte *data, size_t len) {
     int offset = (data[2] << 8) | data[3];
     int count = (data[4] << 8) | data[5];
 
-    if (len - 6 > count * 3) {
+    if (len - 6 > (size_t)count * 3) {
         Serial.println("Udp frame contains invalid count");
         return;
     }

@@ -24,14 +24,8 @@ Setting animationSetting(
         value.set(0);
     },
     [](JsonVariant value) {
-        int idx;
-        if (value.is<String>()) {
-            idx = lookupAnimation(value.as<String>().c_str());
-            if (idx < 0) return false;
-        } else {
-            idx = value.as<int>();
-            if (!isValidAnimation(idx)) return false;
-        }
+        int idx = value.as<int>();
+        if (!isValidAnimation(idx)) return false;
         setAnimation(idx);
         return true;
     }
@@ -88,11 +82,11 @@ bool isValidAnimation(int idx) {
     return animationsList[idx] != NULL;
 }
 
-int lookupAnimation(const char *name) {
+int lookupAnimation(const char *name, size_t len) {
     for (int idx = 0; idx < MAX_ANIMATIONS; idx++) {
         Animation *animation = animationsList[idx];
         if (animation != NULL) {
-            if (!strcmp(name, animation->name)) {
+            if (!strncmp(name, animation->name, len)) {
                 return idx;
             }
         }
