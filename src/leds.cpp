@@ -4,6 +4,17 @@
 
 CRGB leds[LED_COUNT];
 
+unsigned long long showDurationBuckets[] = {
+    1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100
+};
+
+Histogram showDuration(
+    "esp_leds_show_duration",
+    "Duration of synching the LEDs buffer to hardware",
+    sizeof(showDurationBuckets) / sizeof(*showDurationBuckets),
+    showDurationBuckets
+);
+
 #ifdef ESP32
 
 // Task handles for use in the notifications
@@ -53,7 +64,9 @@ void showLedsTask(void *pvParameters) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
         // Do the show (synchronously)
+        unsigned long start = millis();
         FastLED.show();
+        showDuration.observe(millis() - start);
 
         // Notify the calling task.
         xTaskNotifyGive(userTaskHandle);
@@ -63,7 +76,9 @@ void showLedsTask(void *pvParameters) {
 #else // ESP8266
 
 bool showLeds() {
+    unsigned long start = millis();
     FastLED.show();
+    showDuration.observe(millis() - start);
     return true;
 }
 
