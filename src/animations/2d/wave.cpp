@@ -16,7 +16,7 @@ void Wave::draw() {
     for (int x = 0; x < LED_XLEN; x++) {
         for (int y = 0; y < LED_YLEN; y++) {
             float h = 128.0 + 127.0 * wave(w, k, t, x - CENTER_X, y - CENTER_Y);
-            setPixel(x, y, CHSV(h, 255, 255));
+            setPixel(x, y, HsbColor((float)h / 255.0f, 1.0f, 1.0f));
         }
     }
 }

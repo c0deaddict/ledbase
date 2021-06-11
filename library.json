@@ -22,9 +22,9 @@
             "version": "https://github.com/c0deaddict/espbase.git#main"
         },
         {
-            "owner": "fastled",
-            "name": "FastLED",
-            "version": "^3.4.0"
+            "owner": "Makuna",
+            "name": "NeoPixelBus",
+            "version": "^2.6.3"
         }
     ]
 }

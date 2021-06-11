@@ -43,6 +43,10 @@
 #define LED_DEFAULT_BRIGHTNESS 255
 #endif
 
+#ifndef LED_DEFAULT_GAMMA_CORRECTION
+#define LED_DEFAULT_GAMMA_CORRECTION true
+#endif
+
 #ifndef DEFAULT_MOTION_DURATION
 #define DEFAULT_MOTION_DURATION 20
 #endif
@@ -72,5 +76,5 @@
 #endif
 
 #ifndef DEFAULT_COLOR
-#define DEFAULT_COLOR CRGB::Blue
+#define DEFAULT_COLOR RgbColor(0, 255, 0)
 #endif

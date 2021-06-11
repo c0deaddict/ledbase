@@ -7,7 +7,7 @@ float wave(float w, float k, float t, float x, float z) {
 }
 
 void Wave::draw() {
-    fillColor(CRGB::Black);
+    leds->clear();
 
     float t = (millis() / 10000.0) * (float)intensity;
     float w = 1.5;
@@ -22,7 +22,8 @@ void Wave::draw() {
             float vz = z - maxz / 2.0;
             float v = wave(w, k, t, vx, vz);
             float y = round(maxy - ((maxy/2.0) + (maxy/2.0) * v));
-            setPixel(x, y, z, CHSV(255 * (y / maxy), 255, 255));
+            HsbColor color(y / maxy, 1.0f, 1.0f);
+            setPixel(x, y, z, color);
         }
     }
 }

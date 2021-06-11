@@ -28,7 +28,7 @@ UdpMode::UdpMode()
 }
 
 void UdpMode::enter() {
-    ledsOff();
+    leds->off();
 
     active = false;
     lastFrameTime = 0;
@@ -38,7 +38,7 @@ void UdpMode::update() {
     // If no data has been received for `timeout` seconds, turn off the leds.
     if (timeout != 0) {
         if (active && millis() - lastFrameTime >= timeout * 1000L) {
-            ledsOff();
+            leds->off();
             active = false;
         }
     }
@@ -47,7 +47,7 @@ void UdpMode::update() {
         if (millis() - beatStart >= beatDuration) {
             // Stop the beat.
             beatDuration = 0;
-            ledsOff();
+            leds->off();
         }
     }
 }
@@ -69,19 +69,19 @@ void UdpMode::onFrame(byte *data, size_t len) {
     }
 
     for (int i = offset, j = 6; i < offset + count; i++, j += 3) {
-        CRGB color = CRGB(data[j], data[j + 1], data[j + 2]);
+        RgbColor color(data[j], data[j + 1], data[j + 2]);
 
         if (flags & FRAME_RAW) {
             if (i < LED_COUNT) {
-                leds[i] = color;
+                leds->setRawPixel(i, color);
             }
         } else {
-            setLogicalPixel(i, color);
+            leds->setPixel(i, color);
         }
     }
 
     if (flags & FRAME_SYNC) {
-        showLeds();
+        leds->show();
     }
 }
 
@@ -91,11 +91,11 @@ bool UdpMode::onBeat(byte *data, size_t len) {
     active = false;
 
     beatDuration = 10 * (unsigned int)data[1]; // 1 = 10ms
-    beatColor = CRGB(data[2], data[3], data[4]);
+    beatColor = RgbColor(data[2], data[3], data[4]);
     beatStart = millis();
 
-    fillColor(beatColor);
-    showLeds();
+    leds->fill(beatColor);
+    leds->show();
 
     return true;
 }

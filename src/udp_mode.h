@@ -13,7 +13,7 @@ private:
 
     unsigned int beatDuration;
     unsigned long beatStart;
-    CRGB beatColor;
+    RgbColor beatColor;
 
     void frame(byte flags, byte *data, size_t len);
     void beat(byte flags, byte *data, size_t len);
@@ -26,5 +26,3 @@ public:
     void onFrame(byte *data, size_t len);
     bool onBeat(byte *data, size_t len);
 };
-
-extern void setLogicalPixel(int i, CRGB color);

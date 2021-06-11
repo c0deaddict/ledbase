@@ -4,15 +4,15 @@
 
 class Life : public Animation {
 private:
-    CRGB *cells1;
-    CRGB *cells2;
-    CRGB *currentGen;
-    CRGB *nextGen;
+    RgbColor *cells1;
+    RgbColor *cells2;
+    RgbColor *currentGen;
+    RgbColor *nextGen;
 
     int gen;
 
     void seed();
-    int countNeighbours(int idx, CRGB *avgColor);
+    int countNeighbours(int idx, RgbColor *avgColor);
     bool computeNextGen();
 
 public:

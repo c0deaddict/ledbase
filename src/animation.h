@@ -4,7 +4,7 @@
 #include "leds.h"
 
 extern uint8_t intensity;
-extern CRGB color;
+extern RgbColor color;
 
 class Animation {
 private:
@@ -46,7 +46,7 @@ public:
         if (millis() - lastDraw > 1000.0 / fps) {
             lastDraw = millis();
             draw();
-            showLeds();
+            leds->show();
         }
     }
 };

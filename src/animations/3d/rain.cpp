@@ -51,12 +51,13 @@ void Rain::tick() {
 
     for (Drop *d = drops; d < drops + MAX_DROPS; d++) {
         if (d->y >= 0) {
-            setPixel(d->x, d->y, d->z, CRGB::Black);
+            setPixel(d->x, d->y, d->z, RgbColor(0, 0, 0));
             d->y -= 1;
 
             for (int j = 0; j < DROP_TAIL; j++) {
                 byte c = 32 + ((255 - 32)/(DROP_TAIL - 1)) * j;
-                setPixel(d->x, d->y - j, d->z, CHSV(hue, 255, c));
+                HsbColor color((float)hue / 255.0f, 1.0f, (float)c / 255.0f);
+                setPixel(d->x, d->y - j, d->z, color);
             }
         }
     }
