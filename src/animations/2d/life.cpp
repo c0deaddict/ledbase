@@ -61,7 +61,7 @@ void Life::seed() {
         for (int y = -2; y <= 2; y++) {
             if (random(0, 25) <= num) {
                 int idx = CELL_IDX(WIDTH/2 + x, HEIGHT/2 + y);
-                currentGen[idx] = CHSV(random(0, 256), 255, 255);
+                currentGen[idx] = HsbColor((float)random(0, 256) / 255.0f, 1.0f, 1.0f);
             }
         }
     }
@@ -75,9 +75,9 @@ int Life::countNeighbours(int idx, RgbColor *avgColor) {
             RgbColor color = currentGen[j];
             if (color != DEAD) {
                 count++;
-                r += color.r;
-                g += color.g;
-                b += color.b;
+                r += color.R;
+                g += color.G;
+                b += color.B;
             }
         }
     }
@@ -139,7 +139,7 @@ void Life::tick() {
         for (int y = 0; y < LED_YLEN; y++) {
             int idx = CELL_IDX(x + OFFSET_X, y + OFFSET_Y);
             RgbColor color = currentGen[idx];
-            setPixel(x, y, color);
+            leds->setPixel(x, y, color);
             anyLife |= color != DEAD;
         }
     }

@@ -10,7 +10,8 @@ void Rainbow::tick() {
 }
 
 void Rainbow::draw() {
-   for (int i = 0; i < LED_COUNT; i++) {
-       leds->setPixel(i, palette->color((float)(palIndex + i*5) / 255.0f));
-   }
+    for (int i = 0; i < LED_COUNT; i++) {
+        byte hue = palIndex + i*5;
+        leds->setPixel(i, palette->color((float)hue / 255.0f));
+    }
 }

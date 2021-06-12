@@ -11,6 +11,10 @@
 //
 // translation of logical to raw should be done on the buffer.
 // before each show, the buffer can be copied into the actual strip(s) with the Blt method.
+//
+// dotstars have global brightness, this can be set per led with the
+// RgbwFeature.  expose a normal RgbColor buffer to the user of the lib, when
+// showing, copy the buffer and fill in the brightness per pixel (range is 0-31).
 
 class LedDriver {
 private:
