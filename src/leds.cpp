@@ -6,12 +6,12 @@ bool gammaCorrection = LED_DEFAULT_GAMMA_CORRECTION;
 NeoGamma<NeoGammaTableMethod> colorGamma;
 
 unsigned long long showDurationBuckets[] = {
-    1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100
+    10, 20, 50, 100, 200, 500, 1000, 1500, 2000, 3000, 5000, 10000
 };
 
 Histogram showDuration(
     "esp_leds_show_duration",
-    "Duration of synching the LEDs buffer to hardware",
+    "Duration in microseconds of syncing the LEDs buffer to hardware",
     sizeof(showDurationBuckets) / sizeof(*showDurationBuckets),
     showDurationBuckets
 );
@@ -40,9 +40,9 @@ void LedDriver::off() {
 }
 
 void LedDriver::show() {
-    unsigned long start = millis();
+    unsigned long start = micros();
     _show();
-    unsigned long duration = millis() - start;
+    unsigned long duration = micros() - start;
     showDuration.observe(duration);
 }
 
