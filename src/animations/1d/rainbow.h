@@ -4,7 +4,7 @@
 
 class Rainbow : public Animation {
 private:
-    uint8_t palIndex;
+    float offset;
 
 public:
     Rainbow();
