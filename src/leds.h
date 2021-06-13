@@ -2,47 +2,81 @@
 
 #include <NeoPixelBus.h>
 
-// TODO:
-// for brightness+gamma correction
-// need another buffer
-//
-// could use NeoBufferContext for this. the buffer needs to be defined by the
-// client, since it relies on the Feature type parameter.
-//
-// translation of logical to raw should be done on the buffer.
-// before each show, the buffer can be copied into the actual strip(s) with the Blt method.
-//
 // dotstars have global brightness, this can be set per led with the
 // RgbwFeature.  expose a normal RgbColor buffer to the user of the lib, when
 // showing, copy the buffer and fill in the brightness per pixel (range is 0-31).
 
+extern const RgbColor BLACK;
+
 class LedDriver {
-private:
-    virtual void _show() = 0;
-    virtual void _setRawPixel(uint16_t index, RgbColor color) = 0;
-    virtual void _setLogicalPixel(int index, RgbColor color);
-    virtual RgbColor _getLogicalPixel(int index);
+protected:
+    byte brightness = 255;
+    RgbColor buffer[LED_COUNT] = {BLACK, };
+
+    virtual void render() = 0;
+
+    virtual int map(int index);
+    #if LED_DIM == 2
+    virtual int map(int x, int y) = 0;
+    #elif LED_DIM == 3
+    virtual int map(int x, int y, int z) = 0;
+    #endif
+
+    RgbColor filter(RgbColor color);
 
 public:
     virtual void setup();
-    void setRawPixel(uint16_t index, RgbColor color);
-    virtual RgbColor getRawPixel(uint16_t index) = 0;
 
-    virtual void setBrightness(byte brightness) = 0;
+    void setBrightness(byte brightness) {
+        this->brightness = brightness;
+    }
 
-    virtual void fill(RgbColor color);
+    byte getBrightness() {
+        return brightness;
+    }
 
     void show();
+    void fill(RgbColor color);
     void clear();
     void off();
 
-    void setPixel(int i, RgbColor color);
-    RgbColor getPixel(int i);
+    inline void setPixel(int i, RgbColor color) {
+        int idx = map(i);
+        if (idx >= 0) {
+            buffer[idx] = color;
+        }
+    }
 
-    virtual void setPixel(int x, int y, RgbColor color) {};
-    virtual RgbColor getPixel(int x, int y);
-    virtual void setPixel(int x, int y, int z, RgbColor color) {};
-    virtual RgbColor getPixel(int x, int y, int z);
+    inline RgbColor getPixel(int i) {
+        int idx = map(i);
+        if (idx >= 0) {
+            return buffer[idx];
+        } else {
+            return BLACK;
+        }
+    }
+
+    #if LED_DIM == 2
+    inline void setPixel(int x, int y, RgbColor color);
+    inline RgbColor getPixel(int x, int y);
+    #elif LED_DIM == 3
+    inline void setPixel(int x, int y, int z, RgbColor color);
+    inline RgbColor getPixel(int x, int y, int z);
+    #endif
+
+    inline void setRawPixel(int i, RgbColor color) {
+        if (i >= 0 && i < LED_COUNT) {
+            buffer[i] = color;
+        }
+    }
+
+    inline RgbColor getRawPixel(int i) {
+        if (i >= 0 && i < LED_COUNT) {
+            return buffer[i];
+        } else {
+            return BLACK;
+        }
+    }
 };
 
 extern LedDriver *leds;

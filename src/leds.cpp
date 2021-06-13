@@ -2,6 +2,8 @@
 #include "config.h"
 #include "leds.h"
 
+const RgbColor BLACK(0, 0, 0);
+
 bool gammaCorrection = LED_DEFAULT_GAMMA_CORRECTION;
 NeoGamma<NeoGammaTableMethod> colorGamma;
 
@@ -16,22 +18,29 @@ Histogram showDuration(
     showDurationBuckets
 );
 
-void LedDriver::_setLogicalPixel(int index, RgbColor color) {
-    setRawPixel(index, color);
+RgbColor LedDriver::filter(RgbColor color) {
+    if (gammaCorrection) {
+        return colorGamma.Correct(color);
+    } else {
+        return color;
+    }
 }
 
-RgbColor LedDriver::_getLogicalPixel(int index) {
-    return getRawPixel(index);
+void LedDriver::show() {
+    unsigned long start = micros();
+    render();
+    unsigned long duration = micros() - start;
+    showDuration.observe(duration);
 }
 
 void LedDriver::fill(RgbColor color) {
-    for (uint16_t i = 0; i < LED_COUNT; i++) {
-        setRawPixel(i, color);
+    for (int i = 0; i < LED_COUNT; i++) {
+        buffer[i] = color;
     }
 }
 
 void LedDriver::clear() {
-    fill(RgbColor(0, 0, 0));
+    fill(BLACK);
 }
 
 void LedDriver::off() {
@@ -39,41 +48,35 @@ void LedDriver::off() {
     show();
 }
 
-void LedDriver::show() {
-    unsigned long start = micros();
-    _show();
-    unsigned long duration = micros() - start;
-    showDuration.observe(duration);
-}
+#if LED_DIM == 1
 
-void LedDriver::setRawPixel(uint16_t index, RgbColor color) {
-    if (gammaCorrection) {
-        color = colorGamma.Correct(color);
-    }
-    _setRawPixel(index, color);
-}
-
-void LedDriver::setPixel(int i, RgbColor color) {
-    if (i >= 0 && i < LED_COUNT) {
-        _setLogicalPixel(i, color);
-    }
-}
-
-RgbColor LedDriver::getPixel(int i) {
-    if (i >= 0 && i < LED_COUNT) {
-        return _getLogicalPixel(i);
+inline int LedDriver::map(int index) {
+    if (index >= 0 && index < LED_COUNT) {
+        return index;
     } else {
-        return RgbColor(0, 0, 0);
+        return -1;
     }
 }
 
-RgbColor LedDriver::getPixel(int x, int y) {
-    return RgbColor(0, 0, 0);
+#elif LED_DIM == 2
+
+inline int LedDriver::map(int index) {
+    int x = index % LED_XLEN;
+    int y = index / LED_XLEN;
+    return map(x, y);
 }
 
-RgbColor LedDriver::getPixel(int x, int y, int z) {
-    return RgbColor(0, 0, 0);
+#elif LED_DIM == 3
+
+inline int LedDriver::map(int index) {
+    int z = i / (LED_YLEN * LED_XLEN);
+    int r = i % (LED_YLEN * LED_XLEN);
+    int y = r / LED_XLEN;
+    int x = r % LED_XLEN;
+    return map(x, y, z);
 }
+
+#endif
 
 Setting brightnessSetting(
     "brightness",
