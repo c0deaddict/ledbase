@@ -72,7 +72,7 @@
 #endif
 
 #ifndef DEFAULT_INTENSITY
-#define DEFAULT_INTENSITY 10
+#define DEFAULT_INTENSITY 10.0f
 #endif
 
 #ifndef DEFAULT_COLOR

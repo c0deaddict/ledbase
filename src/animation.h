@@ -3,7 +3,7 @@
 #include "config.h"
 #include "leds.h"
 
-extern uint8_t intensity;
+extern float intensity;
 extern RgbColor color;
 
 class Animation {
@@ -37,7 +37,7 @@ public:
 
     void update() {
         // Call tick() `intensity` times per second.
-        if (intensity > 0 && millis() - lastTick > 1000.0 / (intensity * intensityScalar)) {
+        if (intensity > 0 && millis() - lastTick > 1000.0f / (intensity * intensityScalar)) {
             lastTick = millis();
             tick();
         }

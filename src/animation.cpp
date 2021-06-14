@@ -13,7 +13,7 @@ public:
 };
 
 Animation *animation = new NullAnimation();
-uint8_t intensity = DEFAULT_INTENSITY;
+float intensity = DEFAULT_INTENSITY;
 RgbColor color = DEFAULT_COLOR;
 
 bool started = false;
@@ -37,8 +37,8 @@ Setting intensitySetting(
         value.set(DEFAULT_INTENSITY);
     },
     [](JsonVariant value) {
-        int newIntensity = value.as<int>();
-        if (newIntensity < 0 || newIntensity > 255) {
+        float newIntensity = value.as<float>();
+        if (newIntensity < 0) {
             return false;
         }
         intensity = newIntensity;
