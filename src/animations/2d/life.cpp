@@ -12,7 +12,7 @@
 #define OFFSET_X (WIDTH - LED_XLEN + 1)/2
 #define OFFSET_Y (HEIGHT - LED_YLEN + 1)/2
 
-const CRGB DEAD = CRGB(0, 0, 0);
+const RgbColor DEAD(0, 0, 0);
 
 const int neighbourOffsets[8] = {
     CELL_IDX(-1, -1), // y-1, x-1
@@ -31,8 +31,8 @@ Life::Life() : Animation("life") {
 }
 
 void Life::start() {
-    cells1 = (CRGB *)malloc(sizeof(CRGB) * CELL_COUNT);
-    cells2 = (CRGB *)malloc(sizeof(CRGB) * CELL_COUNT);
+    cells1 = (RgbColor *)malloc(sizeof(RgbColor) * CELL_COUNT);
+    cells2 = (RgbColor *)malloc(sizeof(RgbColor) * CELL_COUNT);
     currentGen = cells1;
     nextGen = cells2;
 
@@ -61,23 +61,23 @@ void Life::seed() {
         for (int y = -2; y <= 2; y++) {
             if (random(0, 25) <= num) {
                 int idx = CELL_IDX(WIDTH/2 + x, HEIGHT/2 + y);
-                currentGen[idx] = CHSV(random(0, 256), 255, 255);
+                currentGen[idx] = HsbColor((float)random(0, 256) / 255.0f, 1.0f, 1.0f);
             }
         }
     }
 }
 
-int Life::countNeighbours(int idx, CRGB *avgColor) {
+int Life::countNeighbours(int idx, RgbColor *avgColor) {
     int count = 0, r = 0, g = 0, b = 0;
     for (int i = 0; i < 8; i++) {
         int j = idx + neighbourOffsets[i];
         if (j >= 0 && j < CELL_COUNT) {
-            CRGB color = currentGen[j];
+            RgbColor color = currentGen[j];
             if (color != DEAD) {
                 count++;
-                r += color.r;
-                g += color.g;
-                b += color.b;
+                r += color.R;
+                g += color.G;
+                b += color.B;
             }
         }
     }
@@ -86,7 +86,7 @@ int Life::countNeighbours(int idx, CRGB *avgColor) {
         g /= count;
         b /= count;
     }
-    *avgColor = CRGB(r, g, b);
+    *avgColor = RgbColor(r, g, b);
     return count;
 }
 
@@ -95,7 +95,7 @@ bool Life::computeNextGen() {
 
     // Compute the next generation.
     for (int i = 0; i < CELL_COUNT; i++) {
-        CRGB avgColor;
+        RgbColor avgColor;
         int count = countNeighbours(i, &avgColor);
         if (currentGen[i] == DEAD) {
             if (count == 3) {
@@ -138,8 +138,8 @@ void Life::tick() {
     for (int x = 0; x < LED_XLEN; x++) {
         for (int y = 0; y < LED_YLEN; y++) {
             int idx = CELL_IDX(x + OFFSET_X, y + OFFSET_Y);
-            CRGB color = currentGen[idx];
-            setPixel(x, y, color);
+            RgbColor color = currentGen[idx];
+            leds->setPixel(x, y, color);
             anyLife |= color != DEAD;
         }
     }

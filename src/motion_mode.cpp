@@ -21,7 +21,7 @@ MotionMode::MotionMode() : Mode("motion"), motionDuration(DEFAULT_MOTION_DURATIO
 void MotionMode::enter() {
     motion = false;
     motionStart = 0;
-    ledsOff();
+    leds->off();
 }
 
 void MotionMode::leave() {
@@ -33,7 +33,7 @@ void MotionMode::update() {
         if (millis() - motionStart > motionDuration*1000L) {
             motion = false;
             stopAnimation();
-            ledsOff();
+            leds->off();
         } else {
             animation->update();
         }

@@ -4,5 +4,5 @@ Solid::Solid() : Animation("solid", FPS) {
 }
 
 void Solid::draw() {
-    fillColor(color);
+    leds->fill(color);
 }

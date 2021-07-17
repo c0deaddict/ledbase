@@ -9,7 +9,7 @@ public:
     OnMode() : Mode("on") {};
 
     void enter() {
-        ledsOff();
+        leds->off();
         startAnimation();
     }
 

@@ -13,8 +13,8 @@ public:
 };
 
 Animation *animation = new NullAnimation();
-uint8_t intensity = DEFAULT_INTENSITY;
-CRGB color = DEFAULT_COLOR;
+float intensity = DEFAULT_INTENSITY;
+RgbColor color = DEFAULT_COLOR;
 
 bool started = false;
 
@@ -37,8 +37,8 @@ Setting intensitySetting(
         value.set(DEFAULT_INTENSITY);
     },
     [](JsonVariant value) {
-        int newIntensity = value.as<int>();
-        if (newIntensity < 0 || newIntensity > 255) {
+        float newIntensity = value.as<float>();
+        if (newIntensity < 0) {
             return false;
         }
         intensity = newIntensity;
@@ -50,7 +50,7 @@ Setting colorSetting(
     "color",
     [](JsonVariant& value) {
         char buf[7];
-        sprintf(buf, "%02x%02x%02x", color.r, color.g, color.b);
+        sprintf(buf, "%02x%02x%02x", color.R, color.G, color.B);
         value.set(String(buf));
     },
     [](JsonVariant value) {
@@ -59,7 +59,7 @@ Setting colorSetting(
         if (str == NULL || sscanf(str, "%02x%02x%02x", &r, &g, &b) != 3) {
             return false;
         }
-        color = CRGB(r, g, b);
+        color = RgbColor(r, g, b);
         return true;
     }
 );

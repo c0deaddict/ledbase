@@ -6,11 +6,13 @@ Rainbow::Rainbow() : Animation("rainbow") {
 };
 
 void Rainbow::tick() {
-    palIndex++;
+    offset += 1.0f / LED_COUNT;
 }
 
 void Rainbow::draw() {
-   for (int i = 0; i < LED_COUNT; i++) {
-       leds[i] = palette->color(palIndex + i*5);
-   }
+    float hue = offset;
+    for (int i = 0; i < LED_COUNT; i++) {
+        hue += 1.0f / LED_COUNT;
+        leds->setPixel(i, palette->color(fmod(hue, 1.0f)));
+    }
 }

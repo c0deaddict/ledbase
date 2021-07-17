@@ -1,15 +1,13 @@
 #include <espbase.h>
 #include "ledbase.h"
 
-void setupLeds();
 void setupUdp();
 void setupHttpRoutes();
 void handleUdp();
 
 void setupLedbase() {
     // LEDs need to be setup before network.
-    // delay(3000);
-    setupLeds();
+    leds->setup();
     mode->enter();
 
     // Setup http routes before calling setupEspbase.

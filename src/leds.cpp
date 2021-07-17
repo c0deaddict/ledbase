@@ -2,120 +2,81 @@
 #include "config.h"
 #include "leds.h"
 
-CRGB leds[LED_COUNT];
+const RgbColor BLACK(0, 0, 0);
+
+bool gammaCorrection = LED_DEFAULT_GAMMA_CORRECTION;
+NeoGamma<NeoGammaTableMethod> colorGamma;
 
 unsigned long long showDurationBuckets[] = {
-    1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100
+    10, 20, 50, 100, 200, 500, 1000, 1500, 2000, 3000, 5000, 10000
 };
 
 Histogram showDuration(
     "esp_leds_show_duration",
-    "Duration of synching the LEDs buffer to hardware",
+    "Duration in microseconds of syncing the LEDs buffer to hardware",
     sizeof(showDurationBuckets) / sizeof(*showDurationBuckets),
     showDurationBuckets
 );
 
-#ifdef ESP32
-
-// Task handles for use in the notifications
-static TaskHandle_t showLedsTaskHandle = 0;
-static TaskHandle_t userTaskHandle = 0;
-
-/**
- * Call this function instead of FastLED.show(). It signals core 1 to issue a
- * show, then waits for a notification that it is done.
- */
-bool showLeds() {
-    if (userTaskHandle != 0) return false;
-
-    // Store the handle of the current task, so that the show task can
-    // notify it when it's done.
-    userTaskHandle = xTaskGetCurrentTaskHandle();
-
-    // Trigger the show task.
-    xTaskNotifyGive(showLedsTaskHandle);
-
-    // Wait to be notified that it's done.
-    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50);
-    ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
-    userTaskHandle = 0;
-
-    return true;
-}
-
-bool ensureShowLeds() {
-    if (showLeds()) return true;
-
-    for (int i = 0; i < 11; i++) {
-        vTaskDelay(pdMS_TO_TICKS(5));
-        if (showLeds()) return true;
-    }
-
-    return false;
-}
-
-/**
- * This function runs on core 1 and just waits for requests to call
- * FastLED.show()
- */
-void showLedsTask(void *pvParameters) {
-    for(;;) {
-        // Wait for the trigger.
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-
-        // Do the show (synchronously)
-        unsigned long start = millis();
-        FastLED.show();
-        showDuration.observe(millis() - start);
-
-        // Notify the calling task.
-        xTaskNotifyGive(userTaskHandle);
+RgbColor LedDriver::filter(RgbColor color) {
+    if (gammaCorrection) {
+        return colorGamma.Correct(color);
+    } else {
+        return color;
     }
 }
 
-#else // ESP8266
-
-bool showLeds() {
-    unsigned long start = millis();
-    FastLED.show();
-    showDuration.observe(millis() - start);
-    return true;
+void LedDriver::show() {
+    unsigned long start = micros();
+    render();
+    unsigned long duration = micros() - start;
+    showDuration.observe(duration);
 }
 
-bool ensureShowLeds() {
-    return showLeds();
+void LedDriver::fill(RgbColor color) {
+    for (int i = 0; i < LED_COUNT; i++) {
+        buffer[i] = color;
+    }
+}
+
+void LedDriver::clear() {
+    fill(BLACK);
+}
+
+void LedDriver::off() {
+    clear();
+    show();
+}
+
+#if LED_DIM == 1
+
+inline int LedDriver::map(int index) {
+    if (index >= 0 && index < LED_COUNT) {
+        return index;
+    } else {
+        return -1;
+    }
+}
+
+#elif LED_DIM == 2
+
+inline int LedDriver::map(int index) {
+    int x = index % LED_XLEN;
+    int y = index / LED_XLEN;
+    return map(x, y);
+}
+
+#elif LED_DIM == 3
+
+inline int LedDriver::map(int index) {
+    int z = index / (LED_YLEN * LED_XLEN);
+    int r = index % (LED_YLEN * LED_XLEN);
+    int y = r / LED_XLEN;
+    int x = r % LED_XLEN;
+    return map(x, y, z);
 }
 
 #endif
-
-void fillColor(CRGB color) {
-    fill_solid(leds, LED_COUNT, color);
-}
-
-void clearLeds() {
-    fillColor(CRGB::Black);
-}
-
-void ledsOff() {
-    clearLeds();
-    ensureShowLeds();
-}
-
-void setupLeds() {
-    configureLeds();
-
-    #ifdef ESP32
-    xTaskCreatePinnedToCore(showLedsTask, "showLedsTask", 2048, NULL, 2, &showLedsTaskHandle, LED_SHOW_CORE);
-    #endif
-
-    FastLED.setDither(0);
-    FastLED.setBrightness(LED_DEFAULT_BRIGHTNESS);
-    ledsOff();
-}
-
-void setBrightness(byte value) {
-    FastLED.setBrightness(value);
-}
 
 Setting brightnessSetting(
     "brightness",
@@ -124,7 +85,18 @@ Setting brightnessSetting(
     },
     [](JsonVariant value) {
         int brightness = constrain(value.as<int>(), 0, 255);
-        setBrightness(brightness);
+        leds->setBrightness(brightness);
+        return true;
+    }
+);
+
+Setting gammaCorrectionSetting(
+    "gammaCorrection",
+    [](JsonVariant& value) {
+        value.set(LED_DEFAULT_GAMMA_CORRECTION);
+    },
+    [](JsonVariant value) {
+        gammaCorrection = value.as<bool>();
         return true;
     }
 );

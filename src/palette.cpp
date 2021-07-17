@@ -2,27 +2,27 @@
 #include "config.h"
 #include "palette.h"
 
-// FastLED builtin palettes.
-Palette16 rainbow("rainbow", RainbowColors_p);
-Palette16 rainbowStripe("rainbow_stripe", RainbowStripeColors_p);
-Palette16 cloud("cloud", CloudColors_p);
-Palette16 lava("lava", LavaColors_p);
-Palette16 ocean("ocean", OceanColors_p);
-Palette16 forest("forest", ForestColors_p);
-Palette16 party("party", PartyColors_p);
-Palette16 heat("heat", HeatColors_p);
+// Palette16 rainbow("rainbow", RainbowColors_p);
+// Palette16 rainbowStripe("rainbow_stripe", RainbowStripeColors_p);
+// Palette16 cloud("cloud", CloudColors_p);
+// Palette16 lava("lava", LavaColors_p);
+// Palette16 ocean("ocean", OceanColors_p);
+// Palette16 forest("forest", ForestColors_p);
+// Palette16 party("party", PartyColors_p);
+// Palette16 heat("heat", HeatColors_p);
 
-Palette* palettesList[MAX_PALETTES] = {
-    &rainbow,
-    &rainbowStripe,
-    &cloud,
-    &lava,
-    &ocean,
-    &forest,
-    &party,
-    &heat,
-    NULL,
+class RainbowPalette : public Palette {
+public:
+    RainbowPalette() : Palette("rainbow") {};
+
+    RgbColor color(float index) {
+        return HsbColor(index, 1.0f, 1.0f);
+    }
 };
+
+RainbowPalette rainbow;
+
+Palette* palettesList[MAX_PALETTES] = { &rainbow, };
 
 Palette *palette = palettesList[0];
 

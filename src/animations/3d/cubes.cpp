@@ -11,17 +11,17 @@ void Cubes::start() {
     t = 0;
 }
 
-void Cubes::fillBox(int x1, int y1, int z1, int x2, int y2, int z2, CRGB color) {
+void Cubes::fillBox(int x1, int y1, int z1, int x2, int y2, int z2, RgbColor color) {
     for (int x = x1; x < x2; x++) {
         for (int y = y1; y < y2; y++) {
             for (int z = z1; z < z2; z++) {
-                setPixel(x, y, z, color);
+                leds->setPixel(x, y, z, color);
             }
         }
     }
 }
 
-void Cubes::drawCube(int offset, int y1, CRGB color) {
+void Cubes::drawCube(int offset, int y1, RgbColor color) {
     int j = t % MOVE;
     int y2 = y1 + BOX_LEN;
 
@@ -49,13 +49,13 @@ void Cubes::drawCube(int offset, int y1, CRGB color) {
 }
 
 void Cubes::tick() {
-    fillColor(CRGB::Black);
+    leds->clear();
 
     t = (t + 1) % (4 * MOVE);
 
-    drawCube(0, 0, CRGB(255, 0, 0));
-    drawCube(1, MOVE, CRGB(255, 255, 0));
-    drawCube(2, 0, CRGB(0, 255, 0));
-    drawCube(3, MOVE, CRGB(0, 0, 255));
+    drawCube(0, 0, RgbColor(255, 0, 0));
+    drawCube(1, MOVE, RgbColor(255, 255, 0));
+    drawCube(2, 0, RgbColor(0, 255, 0));
+    drawCube(3, MOVE, RgbColor(0, 0, 255));
 }
 #endif

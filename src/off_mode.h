@@ -8,6 +8,6 @@ public:
     OffMode() : Mode("off") {};
 
     void enter() {
-        ledsOff();
+        leds->off();
     }
 };
