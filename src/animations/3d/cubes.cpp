@@ -15,7 +15,7 @@ void Cubes::fillBox(int x1, int y1, int z1, int x2, int y2, int z2, RgbColor col
     for (int x = x1; x < x2; x++) {
         for (int y = y1; y < y2; y++) {
             for (int z = z1; z < z2; z++) {
-                setPixel(x, y, z, color);
+                leds->setPixel(x, y, z, color);
             }
         }
     }

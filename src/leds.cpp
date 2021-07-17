@@ -69,8 +69,8 @@ inline int LedDriver::map(int index) {
 #elif LED_DIM == 3
 
 inline int LedDriver::map(int index) {
-    int z = i / (LED_YLEN * LED_XLEN);
-    int r = i % (LED_YLEN * LED_XLEN);
+    int z = index / (LED_YLEN * LED_XLEN);
+    int r = index % (LED_YLEN * LED_XLEN);
     int y = r / LED_XLEN;
     int x = r % LED_XLEN;
     return map(x, y, z);

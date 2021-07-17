@@ -2,10 +2,6 @@
 
 #include <NeoPixelBus.h>
 
-// dotstars have global brightness, this can be set per led with the
-// RgbwFeature.  expose a normal RgbColor buffer to the user of the lib, when
-// showing, copy the buffer and fill in the brightness per pixel (range is 0-31).
-
 extern const RgbColor BLACK;
 
 class LedDriver {
@@ -57,11 +53,41 @@ public:
     }
 
     #if LED_DIM == 2
-    inline void setPixel(int x, int y, RgbColor color);
-    inline RgbColor getPixel(int x, int y);
+
+    inline void setPixel(int x, int y, RgbColor color) {
+        int idx = map(x, y);
+        if (idx >= 0) {
+            buffer[idx] = color;
+        }
+    }
+
+    inline RgbColor getPixel(int x, int y) {
+        int idx = map(x, y);
+        if (idx >= 0) {
+            return buffer[idx];
+        } else {
+            return BLACK;
+        }
+    }
+
     #elif LED_DIM == 3
-    inline void setPixel(int x, int y, int z, RgbColor color);
-    inline RgbColor getPixel(int x, int y, int z);
+
+    inline void setPixel(int x, int y, int z, RgbColor color) {
+        int idx = map(x, y, z);
+        if (idx >= 0) {
+            buffer[idx] = color;
+        }
+    }
+
+    inline RgbColor getPixel(int x, int y, int z) {
+        int idx = map(x, y, z);
+        if (idx >= 0) {
+            return buffer[idx];
+        } else {
+            return BLACK;
+        }
+    }
+
     #endif
 
     inline void setRawPixel(int i, RgbColor color) {

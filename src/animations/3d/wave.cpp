@@ -23,7 +23,7 @@ void Wave::draw() {
             float v = wave(w, k, t, vx, vz);
             float y = round(maxy - ((maxy/2.0) + (maxy/2.0) * v));
             HsbColor color(y / maxy, 1.0f, 1.0f);
-            setPixel(x, y, z, color);
+            leds->setPixel(x, y, z, color);
         }
     }
 }

@@ -16,7 +16,7 @@ void mqttControlMessage(char *topic, char *payload, size_t len) {
         if (idx >= 0) setMode(idx);
     } else if (!strcmp(p, "animation")) {
         int idx = lookupAnimation(payload, len);
-        if (idx >= 0) setAnimation(idx);        
+        if (idx >= 0) setAnimation(idx);
     } else {
         Serial.printf("Unknown MQTT control message: %s\n\r", topic);
     }
