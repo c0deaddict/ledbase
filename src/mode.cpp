@@ -15,12 +15,13 @@ Mode* modesList[MAX_MODES] = {
     NULL,
 };
 
-Mode *mode = modesList[0];
+int modeIdx = 0;
+Mode *mode = modesList[modeIdx];
 
 Setting modeSetting(
     "mode",
-    [](JsonVariant& value) {
-        value.set(0);
+    [](JsonDocument &doc, const char *name) {
+        doc[name] = modeIdx;
     },
     [](JsonVariant value) {
         int modeIdx = value.as<int>();
@@ -66,6 +67,7 @@ void setMode(int idx) {
     Serial.printf("Changing mode to %d\n\r", idx);
 
     mode->leave();
+    modeIdx = idx;
     mode = modesList[idx];
     mode->enter();
 }

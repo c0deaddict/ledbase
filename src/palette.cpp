@@ -24,17 +24,18 @@ RainbowPalette rainbow;
 
 Palette* palettesList[MAX_PALETTES] = { &rainbow, };
 
-Palette *palette = palettesList[0];
+int paletteIdx = 0;
+Palette *palette = palettesList[paletteIdx];
 
 Setting paletteSetting(
     "palette",
-    [](JsonVariant& value) {
-        value.set(0);
+    [](JsonDocument &doc, const char *name) {
+        doc[name] = paletteIdx;
     },
     [](JsonVariant value) {
-        int paletteIdx = value.as<int>();
-        if (!isValidPalette(paletteIdx)) return false;
-        setPalette(paletteIdx);
+        int idx = value.as<int>();
+        if (!isValidPalette(idx)) return false;
+        setPalette(idx);
         return true;
     }
 );
@@ -59,5 +60,6 @@ bool isValidPalette(int idx) {
 
 void setPalette(int idx) {
     if (!isValidPalette(idx)) return;
+    paletteIdx = idx;
     palette = palettesList[idx];
 }

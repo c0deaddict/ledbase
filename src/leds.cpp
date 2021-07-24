@@ -80,8 +80,8 @@ inline int LedDriver::map(int index) {
 
 Setting brightnessSetting(
     "brightness",
-    [](JsonVariant& value) {
-        value.set(LED_DEFAULT_BRIGHTNESS);
+    [](JsonDocument &doc, const char *name) {
+        doc[name] = leds->getBrightness();
     },
     [](JsonVariant value) {
         int brightness = constrain(value.as<int>(), 0, 255);
@@ -92,8 +92,8 @@ Setting brightnessSetting(
 
 Setting gammaCorrectionSetting(
     "gammaCorrection",
-    [](JsonVariant& value) {
-        value.set(LED_DEFAULT_GAMMA_CORRECTION);
+    [](JsonDocument &doc, const char *name) {
+        doc[name] = gammaCorrection;
     },
     [](JsonVariant value) {
         gammaCorrection = value.as<bool>();

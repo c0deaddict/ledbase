@@ -12,6 +12,7 @@ public:
     void draw() {};
 };
 
+int animationIdx = 0;
 Animation *animation = new NullAnimation();
 float intensity = DEFAULT_INTENSITY;
 RgbColor color = DEFAULT_COLOR;
@@ -20,8 +21,8 @@ bool started = false;
 
 Setting animationSetting(
     "animation",
-    [](JsonVariant& value) {
-        value.set(0);
+    [](JsonDocument &doc, const char *name) {
+        doc[name] = animationIdx;
     },
     [](JsonVariant value) {
         int idx = value.as<int>();
@@ -33,8 +34,8 @@ Setting animationSetting(
 
 Setting intensitySetting(
     "intensity",
-    [](JsonVariant& value) {
-        value.set(DEFAULT_INTENSITY);
+    [](JsonDocument& doc, const char *name) {
+        doc[name] = intensity;
     },
     [](JsonVariant value) {
         float newIntensity = value.as<float>();
@@ -46,21 +47,24 @@ Setting intensitySetting(
     }
 );
 
+bool setColor(const char *str) {
+    unsigned int r, g, b;
+    if (str == NULL || sscanf(str, "%02x%02x%02x", &r, &g, &b) != 3) {
+        return false;
+    }
+    color = RgbColor(r, g, b);
+    return true;
+}
+
 Setting colorSetting(
     "color",
-    [](JsonVariant& value) {
+    [](JsonDocument &doc, const char *name) {
         char buf[7];
         sprintf(buf, "%02x%02x%02x", color.R, color.G, color.B);
-        value.set(String(buf));
+        doc[name] = String(buf);
     },
     [](JsonVariant value) {
-        unsigned int r, g, b;
-        const char *str = value.as<const char *>();
-        if (str == NULL || sscanf(str, "%02x%02x%02x", &r, &g, &b) != 3) {
-            return false;
-        }
-        color = RgbColor(r, g, b);
-        return true;
+        return setColor(value.as<const char *>());
     }
 );
 
@@ -99,6 +103,7 @@ void setAnimation(int idx) {
 
     // TODO: consider transitions, like fade?
     if (started) animation->stop();
+    animationIdx = idx;
     animation = animationsList[idx];
     if (started) animation->start();
 }

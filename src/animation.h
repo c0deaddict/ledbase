@@ -58,5 +58,6 @@ int registerAnimation(Animation *animation);
 bool isValidAnimation(int idx);
 int lookupAnimation(const char *name, size_t len);
 void setAnimation(int idx);
+bool setColor(const char *str);
 void startAnimation();
 void stopAnimation();
