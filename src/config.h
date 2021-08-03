@@ -72,7 +72,11 @@
 #endif
 
 #ifndef DEFAULT_INTENSITY
-#define DEFAULT_INTENSITY 10.0f
+#define DEFAULT_INTENSITY 1.0f
+#endif
+
+#ifndef DEFAULT_SPEED
+#define DEFAULT_SPEED 1.0f
 #endif
 
 #ifndef DEFAULT_COLOR

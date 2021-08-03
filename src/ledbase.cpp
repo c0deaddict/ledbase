@@ -4,6 +4,7 @@
 void setupUdp();
 void setupHttpRoutes();
 void handleUdp();
+void mqttPreventGcSections();
 
 void setupLedbase() {
     // LEDs need to be setup before network.
@@ -12,6 +13,7 @@ void setupLedbase() {
 
     // Setup http routes before calling setupEspbase.
     setupHttpRoutes();
+    mqttPreventGcSections();
     setupEspbase();
     setupUdp();
 }

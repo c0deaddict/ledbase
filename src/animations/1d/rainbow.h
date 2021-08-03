@@ -8,6 +8,5 @@ private:
 
 public:
     Rainbow();
-    void tick();
     void draw();
 };

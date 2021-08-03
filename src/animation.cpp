@@ -15,6 +15,7 @@ public:
 int animationIdx = 0;
 Animation *animation = new NullAnimation();
 float intensity = DEFAULT_INTENSITY;
+float speed = DEFAULT_SPEED;
 RgbColor color = DEFAULT_COLOR;
 
 bool started = false;
@@ -38,11 +39,21 @@ Setting intensitySetting(
         doc[name] = intensity;
     },
     [](JsonVariant value) {
-        float newIntensity = value.as<float>();
-        if (newIntensity < 0) {
+        return setIntensity(value.as<float>());
+    }
+);
+
+Setting speedSetting(
+    "speed",
+    [](JsonDocument& doc, const char *name) {
+        doc[name] = speed;
+    },
+    [](JsonVariant value) {
+        float newSpeed = value.as<float>();
+        if (newSpeed < 0) {
             return false;
         }
-        intensity = newIntensity;
+        speed = newSpeed;
         return true;
     }
 );
@@ -67,6 +78,22 @@ Setting colorSetting(
         return setColor(value.as<const char *>());
     }
 );
+
+bool setSpeed(float value) {
+    if (speed <= 0) {
+        return false;
+    }
+    speed = value;
+    return true;
+}
+
+bool setIntensity(float value) {
+    if (value <= 0) {
+        return false;
+    }
+    intensity = value;
+    return true;
+}
 
 int registerAnimation(Animation *animation) {
     for (int idx = 0; idx < MAX_ANIMATIONS; idx++) {
