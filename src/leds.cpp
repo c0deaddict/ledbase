@@ -80,8 +80,8 @@ inline int LedDriver::map(int index) {
 
 Setting brightnessSetting(
     "brightness",
-    [](JsonDocument &doc, const char *name) {
-        doc[name] = leds->getBrightness();
+    [](JsonObject &obj, const char *name) {
+        obj[name] = leds->getBrightness();
     },
     [](JsonVariant value) {
         int brightness = constrain(value.as<int>(), 0, 255);
@@ -92,11 +92,24 @@ Setting brightnessSetting(
 
 Setting gammaCorrectionSetting(
     "gammaCorrection",
-    [](JsonDocument &doc, const char *name) {
-        doc[name] = gammaCorrection;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = gammaCorrection;
     },
     [](JsonVariant value) {
         gammaCorrection = value.as<bool>();
         return true;
     }
 );
+
+DeviceDesc ledsDesc([](JsonObject &obj) {
+    JsonObject l = obj.createNestedObject("leds");
+    l["dim"] = LED_DIM;
+    l["count"] = LED_COUNT;
+    #if LED_DIM >= 2
+    l["xlen"] = LED_XLEN;
+    l["ylen"] = LED_YLEN;
+    #endif
+    #if LED_DIM == 3
+    l["zlen"] = LED_ZLEN;
+    #endif
+});

@@ -20,8 +20,8 @@ Mode *mode = modesList[modeIdx];
 
 Setting modeSetting(
     "mode",
-    [](JsonDocument &doc, const char *name) {
-        doc[name] = modeIdx;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = modeIdx;
     },
     [](JsonVariant value) {
         int modeIdx = value.as<int>();

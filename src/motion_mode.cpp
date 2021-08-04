@@ -6,8 +6,8 @@
 MotionMode::MotionMode() : Mode("motion"), motionDuration(DEFAULT_MOTION_DURATION) {
     motionDurationSetting = new Setting(
         "motionDuration",
-        [this](JsonDocument &doc, const char *name) {
-            doc[name] = motionDuration;
+        [this](JsonObject &obj, const char *name) {
+            obj[name] = motionDuration;
         },
         [this](JsonVariant value) {
             int newDuration = value.as<int>();

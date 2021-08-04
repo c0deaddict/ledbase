@@ -29,8 +29,8 @@ Palette *palette = palettesList[paletteIdx];
 
 Setting paletteSetting(
     "palette",
-    [](JsonDocument &doc, const char *name) {
-        doc[name] = paletteIdx;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = paletteIdx;
     },
     [](JsonVariant value) {
         int idx = value.as<int>();

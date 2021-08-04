@@ -14,8 +14,8 @@ UdpMode::UdpMode()
     , beatDuration(0) {
     timeoutSetting = new Setting(
         "udpTimeout",
-        [this](JsonDocument &doc, const char *name) {
-            doc[name] = timeout;
+        [this](JsonObject &obj, const char *name) {
+            obj[name] = timeout;
         },
         [this](JsonVariant value) {
             int newTimeout = value.as<int>();

@@ -22,8 +22,8 @@ bool started = false;
 
 Setting animationSetting(
     "animation",
-    [](JsonDocument &doc, const char *name) {
-        doc[name] = animationIdx;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = animationIdx;
     },
     [](JsonVariant value) {
         int idx = value.as<int>();
@@ -35,8 +35,8 @@ Setting animationSetting(
 
 Setting intensitySetting(
     "intensity",
-    [](JsonDocument& doc, const char *name) {
-        doc[name] = intensity;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = intensity;
     },
     [](JsonVariant value) {
         return setIntensity(value.as<float>());
@@ -45,8 +45,8 @@ Setting intensitySetting(
 
 Setting speedSetting(
     "speed",
-    [](JsonDocument& doc, const char *name) {
-        doc[name] = speed;
+    [](JsonObject &obj, const char *name) {
+        obj[name] = speed;
     },
     [](JsonVariant value) {
         float newSpeed = value.as<float>();
@@ -69,10 +69,10 @@ bool setColor(const char *str) {
 
 Setting colorSetting(
     "color",
-    [](JsonDocument &doc, const char *name) {
+    [](JsonObject &obj, const char *name) {
         char buf[7];
         sprintf(buf, "%02x%02x%02x", color.R, color.G, color.B);
-        doc[name] = String(buf);
+        obj[name] = String(buf);
     },
     [](JsonVariant value) {
         return setColor(value.as<const char *>());
