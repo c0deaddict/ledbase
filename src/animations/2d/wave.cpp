@@ -10,6 +10,7 @@ float wave(float w, float k, float t, float x, float y) {
 }
 
 void Wave::draw() {
+    // TODO: update
     float t = (millis() / 10000.0) * (float)intensity;
     float w = 0.5;
     float k = -w;

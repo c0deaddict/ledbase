@@ -27,7 +27,8 @@ const int neighbourOffsets[8] = {
 };
 
 Life::Life() : Animation("life") {
-    setIntensityScalar(1.0 / 5.0);
+    // TODO: fix tick()
+    // setIntensityScalar(1.0 / 5.0);
 }
 
 void Life::start() {
