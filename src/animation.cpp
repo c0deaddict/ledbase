@@ -2,10 +2,6 @@
 #include "config.h"
 #include "animation.h"
 
-Animation* animationsList[MAX_ANIMATIONS] = { NULL, };
-
-// TODO: define a single RGB color value, define a palette 0 = single color
-
 class NullAnimation : public Animation {
 public:
     NullAnimation() : Animation("null", 0) {};
@@ -14,6 +10,8 @@ public:
 
 int animationIdx = 0;
 Animation *animation = new NullAnimation();
+std::vector<Animation *> animations = {};
+
 float intensity = DEFAULT_INTENSITY;
 float speed = DEFAULT_SPEED;
 RgbColor color = DEFAULT_COLOR;
@@ -27,9 +25,7 @@ Setting animationSetting(
     },
     [](JsonVariant value) {
         int idx = value.as<int>();
-        if (!isValidAnimation(idx)) return false;
-        setAnimation(idx);
-        return true;
+        return setAnimation(idx);
     }
 );
 
@@ -96,43 +92,31 @@ bool setIntensity(float value) {
 }
 
 int registerAnimation(Animation *animation) {
-    for (int idx = 0; idx < MAX_ANIMATIONS; idx++) {
-        if (animationsList[idx] == NULL) {
-            animationsList[idx] = animation;
-            return idx;
-        }
-    }
-
-    return -1;
-}
-
-bool isValidAnimation(int idx) {
-    if (idx < 0 || idx >= MAX_ANIMATIONS) {
-        return false;
-    }
-    return animationsList[idx] != NULL;
+    animations.push_back(animation);
+    return animations.size() - 1;
 }
 
 int lookupAnimation(const char *name, size_t len) {
-    for (int idx = 0; idx < MAX_ANIMATIONS; idx++) {
-        Animation *animation = animationsList[idx];
-        if (animation != NULL) {
-            if (!strncmp(name, animation->name, len)) {
-                return idx;
-            }
+    for (int idx = 0; idx < (int)animations.size(); idx++) {
+        if (!strncmp(name, animations[idx]->name, len)) {
+            return idx;
         }
     }
     return -1;
 }
 
-void setAnimation(int idx) {
-    if (!isValidAnimation(idx)) return;
+bool setAnimation(int idx) {
+    if (idx < 0 || idx >= (int)animations.size()) {
+        return false;
+    }
 
     // TODO: consider transitions, like fade?
     if (started) animation->stop();
     animationIdx = idx;
-    animation = animationsList[idx];
+    animation = animations[idx];
     if (started) animation->start();
+
+    return true;
 }
 
 void startAnimation() {

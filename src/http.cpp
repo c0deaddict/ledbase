@@ -11,18 +11,18 @@ void handleGetNames(AsyncWebServerRequest *request) {
     JsonObject root = response->getRoot();
 
     JsonArray modesJson = root.createNestedArray("modes");
-    for (int i = 0; i < MAX_MODES && modesList[i] != NULL; i++) {
-        modesJson.add(modesList[i]->name);
+    for (Mode *mode : modes) {
+        modesJson.add(mode->name);
     }
 
     JsonArray animationsJson = root.createNestedArray("animations");
-    for (int i = 0; i < MAX_ANIMATIONS && animationsList[i] != NULL; i++) {
-        animationsJson.add(animationsList[i]->name);
+    for (Animation *animation : animations) {
+        animationsJson.add(animation->name);
     }
 
     JsonArray palettesJson = root.createNestedArray("palettes");
-    for (int i = 0; i < MAX_PALETTES && palettesList[i] != NULL; i++) {
-        palettesJson.add(palettesList[i]->name);
+    for (Palette *palette : palettes) {
+        palettesJson.add(palette->name);
     }
 
     response->setLength();

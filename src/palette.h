@@ -12,8 +12,7 @@ public:
 };
 
 extern Palette *palette;
-extern Palette *palettesList[];
+extern std::vector<Palette *> palettes;
 
 int registerPalette(Palette *palette);
-bool isValidPalette(int idx);
-void setPalette(int idx);
+bool setPalette(int idx);

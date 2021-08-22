@@ -22,10 +22,9 @@ public:
 
 RainbowPalette rainbow;
 
-Palette* palettesList[MAX_PALETTES] = { &rainbow, };
-
 int paletteIdx = 0;
-Palette *palette = palettesList[paletteIdx];
+std::vector<Palette *> palettes = { &rainbow };
+Palette *palette = palettes[paletteIdx];
 
 Setting paletteSetting(
     "palette",
@@ -34,32 +33,20 @@ Setting paletteSetting(
     },
     [](JsonVariant value) {
         int idx = value.as<int>();
-        if (!isValidPalette(idx)) return false;
-        setPalette(idx);
-        return true;
+        return setPalette(idx);
     }
 );
 
 int registerPalette(Palette *palette) {
-    for (int idx = 0; idx < MAX_PALETTES; idx++) {
-        if (palettesList[idx] == NULL) {
-            palettesList[idx] = palette;
-            return idx;
-        }
-    }
-
-    return -1;
+    palettes.push_back(palette);
+    return palettes.size() - 1;
 }
 
-bool isValidPalette(int idx) {
-    if (idx < 0 || idx >= MAX_PALETTES) {
+bool setPalette(int idx) {
+    if (idx < 0 || idx >= (int)palettes.size()) {
         return false;
     }
-    return palettesList[idx] != NULL;
-}
-
-void setPalette(int idx) {
-    if (!isValidPalette(idx)) return;
     paletteIdx = idx;
-    palette = palettesList[idx];
+    palette = palettes[idx];
+    return true;
 }

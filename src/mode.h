@@ -32,9 +32,8 @@ public:
 };
 
 extern Mode *mode;
-extern Mode *modesList[];
+extern std::vector<Mode *> modes;
 
 int registerMode(Mode *mode);
-bool isValidMode(int idx);
 int lookupMode(const char *name, size_t len);
-void setMode(int idx);
+bool setMode(int idx);

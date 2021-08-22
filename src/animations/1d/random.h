@@ -6,5 +6,5 @@
 class Random : public Animation {
 public:
     Random() : Animation("random") {};
-    void tick();
+    void draw();
 };

@@ -7,16 +7,15 @@
 #include "motion_mode.h"
 #include "udp_mode.h"
 
-Mode* modesList[MAX_MODES] = {
+std::vector<Mode *> modes = {
     new OffMode(),
     new OnMode(),
     new MotionMode(),
     new UdpMode(),
-    NULL,
 };
 
 int modeIdx = 0;
-Mode *mode = modesList[modeIdx];
+Mode *mode = modes[modeIdx];
 
 Setting modeSetting(
     "mode",
@@ -25,49 +24,35 @@ Setting modeSetting(
     },
     [](JsonVariant value) {
         int modeIdx = value.as<int>();
-        if (!isValidMode(modeIdx)) return false;
-        setMode(modeIdx);
-        return true;
+        return setMode(modeIdx);
     }
 );
 
 int registerMode(Mode *mode) {
-    for (int idx = 0; idx < MAX_MODES; idx++) {
-        if (modesList[idx] == NULL) {
-            modesList[idx] = mode;
-            return idx;
-        }
-    }
-
-    return -1;
-}
-
-bool isValidMode(int idx) {
-    if (idx < 0 || idx >= MAX_MODES) {
-        return false;
-    }
-    return modesList[idx] != NULL;
+    modes.push_back(mode);
+    return modes.size() - 1;
 }
 
 int lookupMode(const char *name, size_t len) {
-    for (int idx = 0; idx < MAX_MODES; idx++) {
-        Mode *mode = modesList[idx];
-        if (mode != NULL) {
-            if (!strncmp(name, mode->name, len)) {
-                return idx;
-            }
+    for (int idx = 0; idx < modes.size(); idx++) {
+        if (!strncmp(name, modes[idx]->name, len)) {
+            return idx;
         }
     }
     return -1;
 }
 
-void setMode(int idx) {
-    if (!isValidMode(idx)) return;
+bool setMode(int idx) {
+    if (idx < 0 || idx >= (int)modes.size()) {
+        return false;
+    }
 
     Serial.printf("Changing mode to %d\n\r", idx);
 
     mode->leave();
     modeIdx = idx;
-    mode = modesList[idx];
+    mode = modes[idx];
     mode->enter();
+
+    return true;
 }

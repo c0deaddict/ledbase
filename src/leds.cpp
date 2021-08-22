@@ -105,6 +105,7 @@ DeviceDesc ledsDesc([](JsonObject &obj) {
     JsonObject l = obj.createNestedObject("leds");
     l["dim"] = LED_DIM;
     l["count"] = LED_COUNT;
+    l["fps"] = FPS;
     #if LED_DIM >= 2
     l["xlen"] = LED_XLEN;
     l["ylen"] = LED_YLEN;

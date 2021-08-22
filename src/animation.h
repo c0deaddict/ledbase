@@ -39,12 +39,11 @@ public:
 };
 
 extern Animation *animation;
-extern Animation *animationsList[];
+extern std::vector<Animation *> animations;
 
 int registerAnimation(Animation *animation);
-bool isValidAnimation(int idx);
 int lookupAnimation(const char *name, size_t len);
-void setAnimation(int idx);
+bool setAnimation(int idx);
 bool setColor(const char *str);
 bool setSpeed(float value);
 bool setIntensity(float value);
