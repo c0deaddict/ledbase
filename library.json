@@ -24,7 +24,7 @@
         {
             "owner": "Makuna",
             "name": "NeoPixelBus",
-            "version": "^2.6.6"
+            "version": "^2.6.9"
         }
     ]
 }
