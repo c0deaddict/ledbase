@@ -17,6 +17,8 @@ std::vector<Mode *> modes = {
 int modeIdx = 0;
 Mode *mode = modes[modeIdx];
 
+void ledsStateUpdated();
+
 Setting modeSetting(
     "mode",
     [](JsonObject &obj, const char *name) {
@@ -24,7 +26,9 @@ Setting modeSetting(
     },
     [](JsonVariant value) {
         int modeIdx = value.as<int>();
-        return setMode(modeIdx);
+        bool ok = setMode(modeIdx);
+        if (ok) ledsStateUpdated();
+        return ok;
     }
 );
 
@@ -34,7 +38,7 @@ int registerMode(Mode *mode) {
 }
 
 int lookupMode(const char *name, size_t len) {
-    for (int idx = 0; idx < modes.size(); idx++) {
+    for (unsigned int idx = 0; idx < modes.size(); idx++) {
         if (!strncmp(name, modes[idx]->name, len)) {
             return idx;
         }
@@ -45,6 +49,10 @@ int lookupMode(const char *name, size_t len) {
 bool setMode(int idx) {
     if (idx < 0 || idx >= (int)modes.size()) {
         return false;
+    }
+
+    if (idx == modeIdx) {
+        return true;
     }
 
     Serial.printf("Changing mode to %d\n\r", idx);

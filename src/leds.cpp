@@ -78,6 +78,8 @@ inline int LedDriver::map(int index) {
 
 #endif
 
+void ledsStateUpdated();
+
 Setting brightnessSetting(
     "brightness",
     [](JsonObject &obj, const char *name) {
@@ -86,6 +88,7 @@ Setting brightnessSetting(
     [](JsonVariant value) {
         int brightness = constrain(value.as<int>(), 0, 255);
         leds->setBrightness(brightness);
+        ledsStateUpdated();
         return true;
     }
 );

@@ -9,7 +9,8 @@ public:
 };
 
 int animationIdx = 0;
-Animation *animation = new NullAnimation();
+Animation *nullAnimation = new NullAnimation();
+Animation *animation = nullAnimation;
 std::vector<Animation *> animations = {};
 
 float intensity = DEFAULT_INTENSITY;
@@ -18,6 +19,8 @@ RgbColor color = DEFAULT_COLOR;
 
 bool started = false;
 
+void ledsStateUpdated();
+
 Setting animationSetting(
     "animation",
     [](JsonObject &obj, const char *name) {
@@ -25,7 +28,9 @@ Setting animationSetting(
     },
     [](JsonVariant value) {
         int idx = value.as<int>();
-        return setAnimation(idx);
+        bool ok = setAnimation(idx);
+        if (ok) ledsStateUpdated();
+        return ok;
     }
 );
 
@@ -71,7 +76,9 @@ Setting colorSetting(
         obj[name] = String(buf);
     },
     [](JsonVariant value) {
-        return setColor(value.as<const char *>());
+        bool ok = setColor(value.as<const char *>());
+        if (ok) ledsStateUpdated();
+        return ok;
     }
 );
 
@@ -97,7 +104,7 @@ int registerAnimation(Animation *animation) {
 }
 
 int lookupAnimation(const char *name, size_t len) {
-    for (int idx = 0; idx < (int)animations.size(); idx++) {
+    for (unsigned int idx = 0; idx < animations.size(); idx++) {
         if (!strncmp(name, animations[idx]->name, len)) {
             return idx;
         }
@@ -108,6 +115,10 @@ int lookupAnimation(const char *name, size_t len) {
 bool setAnimation(int idx) {
     if (idx < 0 || idx >= (int)animations.size()) {
         return false;
+    }
+
+    if (idx == animationIdx && animation != nullAnimation) {
+        return true;
     }
 
     // TODO: consider transitions, like fade?
