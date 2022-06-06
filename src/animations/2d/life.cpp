@@ -123,7 +123,7 @@ bool Life::computeNextGen() {
     return changes > 0;
 }
 
-void Life::tick() {
+void Life::draw() {
     // Could be NULL if there is not enough RAM.
     if (cells1 == NULL || cells2 == NULL) return;
 
@@ -149,8 +149,5 @@ void Life::tick() {
     if (!anyLife || gen > 200) {
         seed();
     }
-}
-
-void Life::draw() {
 }
 #endif
