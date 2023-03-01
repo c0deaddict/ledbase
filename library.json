@@ -24,7 +24,7 @@
         {
             "owner": "Makuna",
             "name": "NeoPixelBus",
-            "version": "^2.6.9"
+            "version": "^2.7.3"
         },
         {
             "owner": "fastled",
