@@ -24,12 +24,12 @@
         {
             "owner": "Makuna",
             "name": "NeoPixelBus",
-            "version": "^2.7.3"
+            "version": "^2.7.6"
         },
         {
             "owner": "fastled",
             "name": "FastLED",
-            "version": "^3.5.0"
+            "version": "^3.6.0"
         }
     ]
 }
