@@ -42,6 +42,7 @@ Setting intensitySetting(
     [](JsonVariant value) {
         bool ok = setIntensity(value.as<float>());
 		if (ok) ledsStateUpdated();
+		return ok;
     }
 );
 
