@@ -40,7 +40,9 @@ Setting intensitySetting(
         obj[name] = intensity;
     },
     [](JsonVariant value) {
-        return setIntensity(value.as<float>());
+        if (setIntensity(value.as<float>())) {
+			ledsStateUpdated();
+		}
     }
 );
 
@@ -55,6 +57,7 @@ Setting speedSetting(
             return false;
         }
         speed = newSpeed;
+        ledsStateUpdated();
         return true;
     }
 );
