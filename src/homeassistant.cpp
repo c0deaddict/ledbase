@@ -17,6 +17,8 @@ Device ledsDevice(LEDS_TOPIC "/config", [](JsonObject &cfg) {
     cfg["brightness"] = true;
     cfg["effect"] = true;
     cfg["color_mode"] = true;
+	cfg["speed"] = true;
+	cfg["intensity"] = true;
 
     JsonArray colorModes = cfg.createNestedArray("supported_color_modes");
     colorModes.add("rgb");
@@ -39,6 +41,8 @@ void ledsStateUpdated() {
     colorState["b"] = color.B;
     state["effect"] = animations[animationIdx]->name;
     state["state"] = modeIdx != 0 ? "ON" : "OFF";
+	state["speed"] = speed;
+	state["intensity"] = intensity;
 
     String buf;
     size_t len = serializeJson(doc, buf);
@@ -71,6 +75,14 @@ MqttSub ledsCommandHandler(
             byte b = doc["color"]["b"].as<byte>();
             color = RgbColor(r, g, b);
         }
+
+		if (doc.containsKey("speed")) {
+			setSpeed(doc["speed"].as<float>());
+		}
+
+		if (doc.containsKey("intensity")) {
+			setIntensity(doc["intensity"].as<float>());
+		}
 
         if (doc.containsKey("effect")) {
             const char *effect = doc["effect"];
